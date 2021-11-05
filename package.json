@@ -1,0 +1,14 @@
+{
+  "name": "scatterbrain",
+  "version": "1.0.0",
+  "description": "A simple discord bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacob Morris",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.3.0"
+  }
+}
