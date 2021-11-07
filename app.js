@@ -30,7 +30,8 @@ client.on('ready', () => {
 
 // Message
 client.on('messageCreate', (message) => {
-    if (message.content.toLocaleUpperCase() === "SCATTER" && (message.author.id === dev_id || privileged_ids.includes(message.author.id))) {
+    const command = message.content.toLocaleUpperCase();
+    if ((command === "SCATTER" || command === "DISTRIBUTE")&& (message.author.id === dev_id || privileged_ids.includes(message.author.id))) {
         console.log("Engage Scatter Protocol");
         /* 
          * - Get Voice Chats and occupants
@@ -38,10 +39,9 @@ client.on('messageCreate', (message) => {
          * -- Store occupants in array
          * - Play SCATTER.mp4 in the vc with Jackie
          * - Shuffle occupants between vc's
-         * -- Shuffle VC Array
-         * -- Shuffle Occupant Array
+         * -- Shuffle Occupants array (randomises who gets moved first)
          * -- For i=0 to occupant array length
-         * --- dest = vcArray[i%vcArray.length]
+         * --- dest = vcArray[math.random() * VCs.length]
          * --- move occupant[i] to dest
         */
         const guild = message.guild;
@@ -57,9 +57,10 @@ client.on('messageCreate', (message) => {
             };
         };
         occupants = shuffle(occupants);
-        voiceChannels = shuffle(voiceChannels);
+        voiceChannels = command === "DISTRIBUTE" ? shuffle(voiceChannels): voiceChannels;
         for (var i=0; i<occupants.length; i++) {
-            occupants[i].setChannel(voiceChannels[i % voiceChannels.length], "SCATTER!");
+            const destination = command === "DISTRIBUTE" ? voiceChannels[i % voiceChannels.length] : voiceChannels[Math.floor(Math.random() * voiceChannels.length)];
+            occupants[i].setChannel(destination, "SCATTER!");
         }
     };
 });
